@@ -283,7 +283,7 @@
         if (response.ok) {
           showToast(`Handshake Verified! Welcome, ${data.user.fullname}.`, "success");
           localStorage.setItem("user", JSON.stringify(data.user));
-          setTimeout(() => window.location.href = "index.html", 1500);
+          setTimeout(() => window.location.href = "dashboard.html", 1500);
         } else {
           showToast(`Security Check: ${data.detail}`, "error");
         }
@@ -310,7 +310,7 @@
           const username = email.split("@")[0].toUpperCase();
           // Save user to local storage and login seamlessly
           localStorage.setItem("user", JSON.stringify({ email: email, fullname: username }));
-          window.location.href = "index.html";
+          window.location.href = "dashboard.html";
 
           // Reset button for browser back-navigation caching
           setTimeout(() => {

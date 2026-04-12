@@ -16,7 +16,7 @@
     <nav class="navbar navbar-custom px-4 mb-5" style="box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
         <a class="navbar-brand text-white fw-bold"><i class="fa-solid fa-server me-2"></i> MongoDB Admin Live
             Monitor</a>
-        <button class="btn btn-light rounded-pill px-4 fw-bold" onclick="location.href='index.html'"
+        <button class="btn btn-light rounded-pill px-4 fw-bold" onclick="location.href='dashboard.html'"
             style="color: #4e54c8;">Back to Home</button>
     </nav>
 
@@ -140,7 +140,7 @@
             const user = JSON.parse(userStr);
             if (!user.email || !ADMIN_EMAILS.includes(user.email.toLowerCase())) {
                 alert("⛔ ACCESS DENIED: You do not have owner privileges to access the database.");
-                window.location.href = "index.html"; // Kickout
+                window.location.href = "dashboard.html"; // Kickout
             }
         }
 
