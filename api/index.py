@@ -1,8 +1,8 @@
 import os
 import sys
 
-# Add the project root to sys.path so we can import from the 'fastapi' folder
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "fastapi"))
+# Add the project root to sys.path so we can import from the 'server' folder
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "server"))
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
