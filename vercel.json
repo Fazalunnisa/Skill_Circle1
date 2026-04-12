@@ -1,0 +1,25 @@
+{
+  "builds": [
+    {
+      "src": "fastapi/main.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "fastapi/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ],
+  "env": {
+    "MONGODB_URI": "mongodb+srv://Admin:1234@cluster0.p4olqer.mongodb.net/?appName=Cluster0"
+  }
+}
