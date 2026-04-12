@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - Skill Circle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(78, 84, 200, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s;
+            border-bottom: 4px solid #4e54c8;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .badge-pill {
+            background: #f0f4ff;
+            color: #4e54c8;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .achievement-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 400px;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <h4 class="logo"><i class="fa-solid fa-graduation-cap"></i> Skill Circle</h4>
+        <ul class="menu">
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
+                My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+                    class="fa-solid fa-layer-group"></i> All Skills</li>
+            <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-certificate"></i> Certificates</li>
+            <li onclick="location.href='progress.html'" style="cursor:pointer;"><i class="fa-solid fa-chart-line"></i>
+                Progress</li>
+            <li class="active" onclick="location.href='profile.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-user"></i> <span id="sidebarName">Profile</span></li>
+            <li class="logout" onclick="logout()" style="cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="main-content" id="mainContent">
+        <nav class="navbar navbar-expand-lg navbar-custom px-4">
+            <button class="btn toggle-btn me-2" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
+                    class="ms-2 brand-text">Circle</span>
+            </a>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn profile-btn dropdown-toggle" data-bs-toggle="dropdown"><i
+                            class="fa-solid fa-user"></i> <span id="navName">Profile</span></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="my_courses.html">My Courses</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container my-5">
+            <div class="container profile-container">
+                <div class="profile-card text-center">
+                    <div class="d-flex flex-column align-items-center mb-4">
+                        <div class="avatar-circle" id="profileInitials">S</div>
+                        <div class="badge-pill" id="platformRank">Novice Learner</div>
+                        <h1 class="fw-bold mb-1 gradient-text" id="profileName">Student Name</h1>
+                        <p class="text-muted" id="profileEmail">student@example.com</p>
+                        <div class="d-flex gap-2 mt-2">
+                            <button class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="openEditModal()">
+                                <i class="fa-solid fa-pen-to-square me-2"></i>Edit Profile
+                            </button>
+                            <button class="btn btn-outline-danger rounded-pill px-4" onclick="logout()">
+                                <i class="fa-solid fa-power-off me-2"></i>Sign Out
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mt-4">
+                        <div class="col-6 col-md-3">
+                            <div class="stat-card shadow-sm">
+                                <h2 class="fw-bold mb-0 text-primary" id="statEnrolled">0</h2>
+                                <p class="text-muted small mb-0">Courses Enrolled</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-card shadow-sm" style="border-color: #22c55e;">
+                                <h2 class="fw-bold mb-0 text-success" id="statCompleted">0</h2>
+                                <p class="text-muted small mb-0">Tracks Finished</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-card shadow-sm" style="border-color: #fb8c00;">
+                                <h2 class="fw-bold mb-0 text-warning" id="statSkillPoints">0</h2>
+                                <p class="text-muted small mb-0">Skill Points</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="stat-card shadow-sm" style="border-color: #6366f1;">
+                                <h2 class="fw-bold mb-0 text-indigo" id="statStreak">1</h2>
+                                <p class="text-muted small mb-0">Day Streak</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="editModal" class="edit-modal">
+            <div class="modal-body shadow-lg">
+                <h4 class="fw-bold mb-3">Update Profile</h4>
+                <div class="mb-3">
+                    <label class="form-label text-muted small fw-bold">NEW FULL NAME</label>
+                    <input type="text" id="editNameInput" class="form-control rounded-pill p-2 px-3">
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary w-100 rounded-pill fw-bold" onclick="saveProfile()">Save
+                        Changes</button>
+                    <button class="btn btn-light w-100 rounded-pill fw-bold" onclick="closeEditModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.getElementById("sidebar");
+            const toggleBtn = document.querySelector(".toggle-btn");
+            const mainContent = document.querySelector(".main-content");
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function (e) {
+                    e.stopPropagation(); sidebar.classList.toggle("open"); mainContent.classList.toggle("shift");
+                });
+            }
+            document.addEventListener("click", function (e) {
+                if (sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+                    sidebar.classList.remove("open"); mainContent.classList.remove("shift");
+                }
+            });
+            const userStr = localStorage.getItem("user");
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                updateProfileUI(user);
+                loadProfileStats(user.email);
+            } else {
+                location.href = "login.html";
+            }
+        });
+
+        function updateProfileUI(user) {
+            document.getElementById("navName").innerText = user.fullname;
+            document.getElementById("sidebarName").innerText = user.fullname;
+            document.getElementById("profileName").innerText = user.fullname;
+            document.getElementById("profileEmail").innerText = user.email;
+
+            const initials = user.fullname.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById("profileInitials").innerText = initials.substring(0, 2);
+        }
+
+        async function loadProfileStats(email) {
+            const completedKey = "completed_courses_" + email;
+            const completed = JSON.parse(localStorage.getItem(completedKey) || "[]");
+            document.getElementById("statCompleted").innerText = completed.length;
+
+            try {
+                const res = await fetch(API_BASE_URL + `/api/my_courses/${email}`);
+                const data = await res.json();
+                if (res.ok) {
+                    const enrolledCount = data.courses.length;
+                    document.getElementById("statEnrolled").innerText = enrolledCount;
+
+                    // Logic: Skill Points are 0 if no active enrollments exist (cleanup sync)
+                    const points = enrolledCount === 0 ? 0 : completed.length * 150;
+                    document.getElementById("statSkillPoints").innerText = points;
+
+                    // Platform Rank Logic based on actual verified completed courses
+                    let rank = "Novice Learner";
+                    if (points >= 150) rank = "Active Student";
+                    if (points >= 450) rank = "Skill Master";
+                    if (points >= 750) rank = "Elite Professional";
+                    document.getElementById("platformRank").innerText = rank;
+                }
+            } catch (e) {
+                // Fallback points calculation
+                document.getElementById("statSkillPoints").innerText = completed.length * 150;
+            }
+        }
+
+        function openEditModal() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            document.getElementById("editNameInput").value = user.fullname;
+            document.getElementById("editModal").style.display = "flex";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById("editNameInput").value.trim();
+            if (newName.length < 3) {
+                alert("Please enter a valid full name.");
+                return;
+            }
+            const user = JSON.parse(localStorage.getItem("user"));
+            user.fullname = newName;
+            localStorage.setItem("user", JSON.stringify(user));
+            updateProfileUI(user);
+            closeEditModal();
+        }
+
+        function logout() { localStorage.removeItem("user"); window.location.href = "login.html"; }
+    </script>
+</body>
+
+</html>

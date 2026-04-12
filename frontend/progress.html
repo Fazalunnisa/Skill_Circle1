@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Progress - Skill Circle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        .placeholder-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <h4 class="logo"><i class="fa-solid fa-graduation-cap"></i> Skill Circle</h4>
+        <ul class="menu">
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
+                My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+                    class="fa-solid fa-layer-group"></i> All Skills</li>
+            <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-certificate"></i> Certificates</li>
+            <li class="active" onclick="location.href='progress.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-chart-line"></i> Progress</li>
+            <li onclick="location.href='profile.html'" style="cursor:pointer;"><i class="fa-solid fa-user"></i> <span
+                    id="sidebarName">Profile</span></li>
+            <li class="logout" onclick="logout()" style="cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="main-content" id="mainContent">
+        <nav class="navbar navbar-expand-lg navbar-custom px-4">
+            <button class="btn toggle-btn me-2" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
+                    class="ms-2 brand-text">Circle</span>
+            </a>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn profile-btn dropdown-toggle" data-bs-toggle="dropdown"><i
+                            class="fa-solid fa-user"></i> <span id="navName">Profile</span></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="my_courses.html">My Courses</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container my-5">
+            <div class="placeholder-box">
+                <i id="progressIcon" class="fa-solid fa-chart-pie text-success"
+                    style="font-size: 80px; margin-bottom: 20px;"></i>
+                <h1 id="progressTitle" class="gradient-text">Learning Progress</h1>
+                <p id="progressSub" class="text-muted fs-5">You are doing great! Keep enrolling and finishing courses to
+                    boost your
+                    stats.</p>
+
+                <div class="container mt-5 text-start" id="progressContainer">
+                    <p class="text-muted text-center fw-bold" id="progressLoading"><i
+                            class="fa-solid fa-circle-notch fa-spin"></i> Loading your dynamic tracking progress...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.getElementById("sidebar");
+            const toggleBtn = document.querySelector(".toggle-btn");
+            const mainContent = document.querySelector(".main-content");
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function (e) {
+                    e.stopPropagation(); sidebar.classList.toggle("open"); mainContent.classList.toggle("shift");
+                });
+            }
+            document.addEventListener("click", function (e) {
+                if (sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+                    sidebar.classList.remove("open"); mainContent.classList.remove("shift");
+                }
+            });
+            const userStr = localStorage.getItem("user");
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                if (user.fullname) {
+                    document.getElementById("navName").innerText = user.fullname;
+                    document.getElementById("sidebarName").innerText = user.fullname;
+                }
+                loadProgress(user.email);
+            } else {
+                document.getElementById('progressContainer').innerHTML = "<div class='alert alert-warning text-center mt-4 fw-bold shadow-sm'><i class='fa-solid fa-lock me-2'></i>Please <a href='login.html' style='color:#4e54c8'>login</a> to view your real-time tracking data.</div>";
+            }
+        });
+
+        async function loadProgress(email) {
+            try {
+                const completedKey = "completed_courses_" + email;
+                const completedCourses = JSON.parse(localStorage.getItem(completedKey) || "[]");
+                const response = await fetch(`/api/my_courses/${email}`);
+                const data = await response.json();
+
+                const container = document.getElementById('progressContainer');
+                container.innerHTML = "";
+
+                if (!response.ok) throw new Error("Failed to fetch");
+                if (!data.courses || data.courses.length === 0) {
+                    document.getElementById("progressIcon").className = "fa-solid fa-chart-line text-muted";
+                    document.getElementById("progressTitle").innerText = "Track Your Journey";
+                    document.getElementById("progressSub").innerText = "You haven't started any courses yet. Enroll now to see your progress tracking here.";
+
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px; background: #f8fafc; border-radius: 15px; margin-top:20px; border: 1px dashed #cbd5e1;">
+                            <i class="fa-solid fa-folder-open text-muted" style="font-size: 50px; margin-bottom: 15px;"></i>
+                            <h4 class="text-muted fw-bold">No Active Progress</h4>
+                            <p class="text-muted mb-0">You have strictly not enrolled in any courses yet.</p>
+                            <button onclick="location.href='index.html#skillsSection'" class="btn btn-primary mt-3 rounded-pill px-4 shadow">Browse Courses</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                data.courses.forEach(c => {
+                    let pct = 0;
+                    if (completedCourses.includes(c.course_id)) {
+                        pct = 100;
+                    } else {
+                        const progKey = email + "_" + c.course_id + "_progress";
+                        let prog = JSON.parse(localStorage.getItem(progKey) || "{}");
+                        let clicks = Object.keys(prog).length;
+                        pct = clicks * 25;
+                        if (pct > 99) pct = 99; // Cap it
+                    }
+
+                    let bgClass = "bg-primary";
+                    if (pct === 100) bgClass = "bg-success";
+                    else if (pct < 50) bgClass = "bg-warning";
+
+                    container.innerHTML += `
+                        <h5 class="fw-bold" style="color: #1e293b;">${c.course_title} <span class="float-end" style="color: #4e54c8">${pct}%</span></h5>
+                        <div class="progress mb-4 rounded-pill shadow-sm" style="height: 14px; background:#e1e5eb;">
+                            <div class="progress-bar ${bgClass} progress-bar-striped progress-bar-animated" style="width: ${pct}%"></div>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                document.getElementById('progressLoading').innerHTML = "<i class='fa-solid fa-triangle-exclamation text-danger'></i> Failed to deeply synchronize tracking data.";
+            }
+        }
+
+        function logout() { localStorage.removeItem("user"); window.location.href = "login.html"; }
+    </script>
+</body>
+
+</html>

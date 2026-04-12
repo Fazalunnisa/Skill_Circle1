@@ -13,3 +13,9 @@ class ContactMessage(BaseModel):
     name: str
     email: str
     feedback: str
+
+class CourseEnrollment(BaseModel):
+    email: str
+    course_id: str
+    course_title: str
+

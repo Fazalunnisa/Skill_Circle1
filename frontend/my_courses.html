@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Courses - Skill Circle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        .placeholder-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h4 class="logo">
+            <i class="fa-solid fa-graduation-cap"></i> Skill Circle
+        </h4>
+        <ul class="menu">
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="active" onclick="location.href='my_courses.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-book-open"></i> My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+                    class="fa-solid fa-layer-group"></i> All Skills</li>
+            <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-certificate"></i> Certificates</li>
+            <li onclick="location.href='progress.html'" style="cursor:pointer;"><i class="fa-solid fa-chart-line"></i>
+                Progress</li>
+            <li onclick="location.href='profile.html'" style="cursor:pointer;"><i class="fa-solid fa-user"></i> <span
+                    id="sidebarName">Profile</span></li>
+            <li class="logout" onclick="logout()" style="cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="main-content" id="mainContent">
+        <nav class="navbar navbar-expand-lg navbar-custom px-4">
+            <button class="btn toggle-btn me-2" onclick="toggleSidebar()">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
+                    class="ms-2 brand-text">Circle</span>
+            </a>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn profile-btn dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user"></i> <span id="navName">Profile</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="my_courses.html">My Courses</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container my-5">
+            <div class="placeholder-box">
+                <i class="fa-solid fa-book-open-reader text-primary" style="font-size: 80px; margin-bottom: 20px;"></i>
+                <h1 class="gradient-text">Your Enrolled Courses</h1>
+                <p class="text-muted fs-5">Pick up right where you left off.</p>
+                <div id="coursesList" class="row g-4 mt-4 text-start"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.getElementById("sidebar");
+            const toggleBtn = document.querySelector(".toggle-btn");
+            const mainContent = document.querySelector(".main-content");
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle("open");
+                    mainContent.classList.toggle("shift");
+                });
+            }
+            document.addEventListener("click", function (e) {
+                if (sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+                    sidebar.classList.remove("open");
+                    mainContent.classList.remove("shift");
+                }
+            });
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                alert("Please login first!");
+                // window.location.href = "login.html"; 
+                return;
+            }
+            const user = JSON.parse(userStr);
+            if (user.fullname) {
+                const navName = document.getElementById("navName");
+                if (navName) navName.innerText = user.fullname;
+                const sideName = document.getElementById("sidebarName");
+                if (sideName) sideName.innerText = user.fullname;
+            }
+        });
+        function logout() {
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+        }
+
+        async function fetchMyCourses() {
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                document.getElementById("coursesList").innerHTML = "<div class='col-12 text-center text-muted'><p>Please login to see your courses.</p></div>";
+                return;
+            }
+            const email = JSON.parse(userStr).email;
+            let courses = [];
+
+            const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" ? "http://127.0.0.1:8000" : "https://skill-circle-backend.onrender.com";
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/my_courses/` + encodeURIComponent(email));
+                const data = await res.json();
+                if (res.ok) {
+                    courses = data.courses;
+                } else {
+                    throw new Error("API failed");
+                }
+            } catch (err) {
+                console.error("Using local fallback", err);
+                const myCoursesStr = localStorage.getItem("my_courses");
+                if (myCoursesStr) courses = JSON.parse(myCoursesStr).filter(c => c.email === email);
+            }
+
+            const list = document.getElementById("coursesList");
+            if (courses.length === 0) {
+                list.innerHTML = "<div class='col-12 text-center text-muted'><p>You haven't enrolled in any courses yet.</p></div>";
+                return;
+            }
+            courses.forEach(c => {
+                // Calculate dynamic progress for this user
+                const progressKey = `${email}_${c.course_id}_progress`;
+                const progressData = JSON.parse(localStorage.getItem(progressKey)) || {};
+                let completedCount = Object.keys(progressData).length;
+
+                // SMART SYNC: If course is already in the "Completed" list, force 100%
+                const completedList = JSON.parse(localStorage.getItem(`completed_courses_${email}`)) || [];
+                if (completedList.includes(c.course_id)) {
+                    completedCount = 4;
+                }
+
+                const percent = Math.min(Math.round((completedCount / 4) * 100), 100);
+
+                const col = document.createElement("div");
+                col.className = "col-md-4";
+                col.innerHTML = `
+                    <div class="card h-100" style="border-radius:25px; cursor:pointer; border:none; border-bottom: 5px solid #4e54c8; background: #fff; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.05);" onclick="gotoCourse('${c.course_id}')" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 20px 40px rgba(78,84,200,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.05)'">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div style="width:50px; height:50px; background: #f0f4ff; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                    <i class="fa-solid fa-graduation-cap" style="color:#4e54c8; font-size:22px;"></i>
+                                </div>
+                                <span class="badge rounded-pill ${percent === 100 ? 'bg-success' : 'bg-primary'}" style="font-size: 11px;">${percent}% Done</span>
+                            </div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1e293b; font-size:18px;">${c.course_title}</h5>
+                            
+                            <!-- Dynamic Progress Bar -->
+                            <div class="progress mb-3" style="height: 8px; border-radius: 10px; background: #f0f4ff;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${percent}%; background: linear-gradient(90deg, #4e54c8, #8f94fb); border-radius: 10px;"></div>
+                            </div>
+
+                            <p class="card-text text-muted mb-0" style="font-size: 13px; line-height:1.5;">Track your learning efficiency and pick up right where you left off.</p>
+                            
+                            <div class="mt-4 d-flex align-items-center" style="color:#4e54c8; font-weight:600; font-size:13px;">
+                                ${percent === 100 ? 'Review Course' : 'Resume Learning'} <i class="fa-solid fa-arrow-right ms-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(col);
+            });
+        }
+        function gotoCourse(id) {
+            localStorage.setItem("selectedCourse", id);
+            window.location.href = "course.html";
+        }
+        fetchMyCourses();
+    </script>
+</body>
+
+</html>

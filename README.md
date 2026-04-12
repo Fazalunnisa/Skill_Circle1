@@ -1,4 +1,4 @@
-# SkillCircle Full-Stack Project
+                                                                        # SkillCircle Full-Stack Project
 
 This repository contains the code for the SkillCircle full-stack application.
 
@@ -14,7 +14,7 @@ This repository contains the code for the SkillCircle full-stack application.
 3. Run using `python -m uvicorn main:app --reload`
 4. The server runs on port 8000
 
-### Frontend
+### Frontend                                                                                                                                                                                                          
 1. Make sure the backend server is running.
 2. Serve the `frontend` folder using any local server, for example: `python -m http.server 5500`
 3. Access `http://localhost:5500/welcome.html`

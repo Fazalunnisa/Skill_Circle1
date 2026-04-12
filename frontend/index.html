@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style2.css">
+    <script src="config.js"></script>
 
 </head>
 
@@ -23,6 +24,9 @@
             onclick="closeCustomAlert()"></button>
     </div>
 
+    <!-- Toast Registry -->
+    <div id="toastContainer" class="toast-container"></div>
+
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
 
@@ -31,13 +35,25 @@
         </h4>
 
         <ul class="menu">
-            <li class="active"><i class="fa-solid fa-house"></i> Dashboard</li>
-            <li><i class="fa-solid fa-book-open"></i> My Courses</li>
-            <li><i class="fa-solid fa-layer-group"></i> All Skills</li>
-            <li><i class="fa-solid fa-certificate"></i> Certificates</li>
-            <li><i class="fa-solid fa-chart-line"></i> Progress</li>
-            <li><i class="fa-solid fa-user"></i> <span id="sidebarName">Profile</span></li>
-            <li class="logout" onclick="logout()" style="cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+            <li class="active" onclick="location.href='index.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-house"></i> Dashboard</li>
+            <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
+                My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+                    class="fa-solid fa-layer-group"></i> All Skills</li>
+            <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-certificate"></i> Certificates</li>
+            <li onclick="location.href='progress.html'" style="cursor:pointer;"><i class="fa-solid fa-chart-line"></i>
+                Progress</li>
+            <li onclick="location.href='profile.html'" style="cursor:pointer;"><i class="fa-solid fa-user"></i> <span
+                    id="sidebarName">Profile</span></li>
+
+            <li id="adminSidebarBtn" onclick="location.href='admin.html'" style="cursor: pointer; display: none;">
+                <i class="fa-solid fa-shield-halved"></i> Admin Panel
+            </li>
+
+            <li class="logout" onclick="logout()" style="cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</li>
         </ul>
 
     </div>
@@ -52,9 +68,8 @@
             </button>
 
             <a class="navbar-brand d-flex align-items-center" href="#">
-
-                <img src="logo.jpg" class="logo-img" alt="Logo">
-                <span class="ms-2 brand-text">Skill</span> <span class="ms-2 brand-text">Circle</span>
+                <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
+                    class="ms-2 brand-text">Circle</span>
             </a>
 
             <div class="ms-auto">
@@ -64,12 +79,13 @@
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">My Courses</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><a class="dropdown-item" href="my_courses.html">My Courses</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -156,7 +172,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-sky h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Web Development')">
+                        onclick="openCourse('web')">
                         <i class="fa-solid fa-code skill-icon text-info"></i>
                         <h5>Web Development</h5>
                         <p>HTML, CSS, JS</p>
@@ -165,7 +181,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-green h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Programming')">
+                        onclick="openCourse('programming')">
                         <i class="fa-solid fa-laptop-code skill-icon text-success"></i>
                         <h5>Programming</h5>
                         <p>C, Java, Python</p>
@@ -174,7 +190,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-purple h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Data Science')">
+                        onclick="openCourse('ai')">
                         <i class="fa-solid fa-chart-line skill-icon" style="color: #9333ea;"></i>
                         <h5>Data Science</h5>
                         <p>ML, AI</p>
@@ -183,7 +199,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-emerald h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('cyber')">
                         <i class="fa-solid fa-shield-halved skill-icon text-success"></i>
                         <h5>Cyber Security</h5>
                         <p>Ethical Hacking</p>
@@ -193,7 +209,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-teal h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('db')">
                         <i class="fa-solid fa-database skill-icon" style="color: #0f766e;"></i>
                         <h5>Database Management</h5>
                         <p>MYSQL,MongoDB</p>
@@ -202,7 +218,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-pink h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('git')">
                         <i class="fa-solid fa-git-alt skill-icon" style="color: #db2777;"></i>
                         <h5>Git & Github</h5>
                         <p>Version Control</p>
@@ -211,7 +227,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-cyan h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('cloud')">
                         <i class="fa-solid fa-cloud skill-icon text-info"></i>
                         <h5>Cloud Computing</h5>
                         <p>AWS,Cloud Basics</p>
@@ -220,7 +236,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-indigo h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('mobile')">
                         <i class="fa-solid fa-mobile-screen skill-icon" style="color: #4f46e5;"></i>
                         <h5>Mobile App Development</h5>
                         <p>Android,Flutter</p>
@@ -229,7 +245,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-lightblue h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('design')">
                         <i class="fa-solid fa-pen-ruler skill-icon text-info"></i>
                         <h5>UI/UX</h5>
                         <p>Figma,Design Principles</p>
@@ -238,7 +254,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item tech">
                     <div class="skill-card card-lightred h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Cyber Security')">
+                        onclick="openCourse('dsa')">
                         <i class="fa-solid fa-diagram-project skill-icon text-danger"></i>
                         <h5>Data Structures & Algorithms</h5>
                         <p>problem Solving,Logic</p>
@@ -247,7 +263,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-orange h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Communication')">
+                        onclick="openCourse('comm')">
                         <i class="fa-solid fa-comments skill-icon text-warning"></i>
                         <h5>Communication</h5>
                         <p>Public Speaking</p>
@@ -256,7 +272,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-yellow h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Leadership')">
+                        onclick="openCourse('leadership')">
                         <i class="fa-solid fa-user-tie skill-icon text-success"></i>
                         <h5>Leadership</h5>
                         <p>Team Management</p>
@@ -265,7 +281,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-teal h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Time Management')">
+                        onclick="openCourse('time')">
                         <i class="fa-solid fa-clock skill-icon" style="color: #0f766e;"></i>
                         <h5>Time Management</h5>
                         <p>Productivity</p>
@@ -274,7 +290,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-rose h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('eq')">
                         <i class="fa-solid fa-star skill-icon text-danger"></i>
                         <h5>Personality Dev</h5>
                         <p>Confidence</p>
@@ -283,7 +299,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-lime h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('leadership')">
                         <i class="fa-solid fa-people-group skill-icon text-success"></i>
                         <h5>TeamWork</h5>
                         <p>Collaboration</p>
@@ -292,7 +308,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-amber h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('thinking')">
                         <i class="fa-solid fa-brain skill-icon text-warning"></i>
                         <h5>Critical Thinking</h5>
                         <p>Decision Making</p>
@@ -301,7 +317,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-fuchsia h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('thinking')">
                         <i class="fa-solid fa-puzzle-piece skill-icon" style="color: #c026d3;"></i>
                         <h5>Problem Solving</h5>
                         <p>Analytical Skills</p>
@@ -310,7 +326,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-violet h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('creativity')">
                         <i class="fa-solid fa-lightbulb skill-icon" style="color: #7c3aed;"></i>
                         <h5>Creativity</h5>
                         <p>Innovation</p>
@@ -319,7 +335,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-cyan h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('eq')">
                         <i class="fa-solid fa-arrows-rotate skill-icon text-info"></i>
                         <h5>Adaptability</h5>
                         <p>Flexible Mindset</p>
@@ -328,7 +344,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-mintgreen h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('eq')">
                         <i class="fa-solid fa-heart skill-icon text-danger"></i>
                         <h5>Emotional Intelligence</h5>
                         <p>Self Awareness</p>
@@ -337,7 +353,7 @@
 
                 <div class="col-md-3 col-sm-6 skill-item nontech">
                     <div class="skill-card card-lightblue h-100 d-flex flex-column justify-content-center"
-                        onclick="openCourse('Personality Development')">
+                        onclick="openCourse('comm')">
                         <i class="fa-solid fa-chalkboard-user skill-icon text-info"></i>
                         <h5>Presentation Skills</h5>
                         <p>Professional Skeaping</p>
@@ -395,6 +411,19 @@
                 document.getElementById("navName").innerText = user.fullname;
                 document.getElementById("sidebarName").innerText = user.fullname;
             }
+
+            // 🔒 ROLE-BASED ACCESS CONTROL (RBAC)
+            // Add your exact real email address into this list
+            const ADMIN_EMAILS = ["admin@skillcircle.com", "owner@skillcircle.com", "fazalunnisa@gmail.com", "fazalunnisasyed17@gmail.com"];
+
+            if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+                document.getElementById("adminSidebarBtn").style.display = "block"; // Only show for owners
+            }
+
+            // High-Level Feature Proof: Show Welcome Toast
+            setTimeout(() => {
+                showToast(`Welcome back, ${user.fullname}! Good luck with your learning.`, 'success');
+            }, 800);
 
         });
 
@@ -477,6 +506,27 @@
             input.focus();
         });
 
+        /* TOAST SYSTEM */
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info');
+
+            const toast = document.createElement('div');
+            toast.className = `custom-toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon}"></i>
+                <span class="fw-medium">${message}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
 
 
         /* FILTER */
@@ -507,28 +557,51 @@
                 }
 
             });
+
+            // Auto-scroll back to top of skills section
+            scrollToSkills();
         }
 
 
         /* COUNTER */
-        function animate(id, end, symbol = "+") {
-
+        function animate(id, end, symbol = "") {
             let el = document.getElementById(id);
             let start = 0;
+            if (end <= 0) {
+                el.innerText = end + symbol;
+                return;
+            }
+
+            let step = Math.ceil(end / 40); // Finish in ~40 frames
 
             let timer = setInterval(() => {
-                start++;
+                start += step;
+                if (start >= end) {
+                    start = end;
+                    clearInterval(timer);
+                }
                 el.innerText = start + symbol;
-                if (start >= end) clearInterval(timer);
-            }, 20);
+            }, 35);
+        }
 
+        async function loadDatabaseStats() {
+            try {
+                const res = await fetch(API_BASE_URL + "/api/stats");
+
+                if (res.ok) {
+                    const data = await res.json();
+                    animate("studentsCount", data.active_students, "+");
+                    animate("coursesCount", data.total_courses, "+");
+                    animate("certificatesCount", data.certificates_issued, "+");
+                    animate("successRate", data.success_rate, "%");
+                }
+            } catch (err) {
+                console.error("Failed to load DB stats:", err);
+            }
         }
 
         window.onload = () => {
-            animate("studentsCount", 120, "+");
-            animate("coursesCount", 25, "+");
-            animate("certificatesCount", 80, "+");
-            animate("successRate", 95, "%");
+            loadDatabaseStats();
         };
 
         /* SCROLL TO SKILLS */

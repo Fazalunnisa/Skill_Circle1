@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill Circle | 3D Immersive Learning Hub</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --sidebar-width: 320px;
+            --accent: #4834d4;
+            --mild-default: #e0e5ec;
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: var(--mild-default);
+            color: #2d3436;
+            overflow-x: hidden;
+            display: flex;
+            transition: background-color 1s ease;
+            /* Smooth color transition */
+        }
+
+        /* --- THREE.JS BACKGROUND --- */
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- SIDEBAR DESIGN --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--accent);
+            text-align: center;
+            padding: 20px 0;
+            letter-spacing: -1px;
+        }
+
+        .cat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a0aec0;
+            margin: 25px 0 10px 10px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            transform: translateX(10px);
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 25px rgba(72, 52, 212, 0.3);
+        }
+
+        /* --- MAIN AREA --- */
+        .main {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            width: calc(100% - var(--sidebar-width));
+            perspective: 1200px;
+        }
+
+        .slogan-box {
+            font-style: italic;
+            font-weight: 500;
+            color: #718096;
+            margin-bottom: 15px;
+            height: 24px;
+        }
+
+        .hero-banner {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 35px;
+            padding: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 50px;
+            transform-style: preserve-3d;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-info h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .hero-info p {
+            color: #4a5568;
+            max-width: 650px;
+            font-size: 17px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .course-img-3d {
+            width: 400px;
+            height: 250px;
+            border-radius: 25px;
+            object-fit: cover;
+            transform: rotateY(-15deg) rotateX(10deg) translateZ(60px);
+            box-shadow: 30px 30px 60px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        /* --- RESOURCES --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .res-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .res-card:hover {
+            transform: translateY(-20px) rotateX(5deg);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1);
+        }
+
+        .res-card img {
+            width: 100%;
+            height: 160px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 25px;
+        }
+
+        /* --- FLOATING 3D QUOTE --- */
+        .quote-panel {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            width: 320px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+            transform: rotateY(-10deg) rotateX(5deg);
+            border-left: 6px solid var(--accent);
+            z-index: 1000;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 991px) {
+            .hero-banner {
+                flex-direction: column;
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .course-img-3d {
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+                margin-top: 40px;
+                transform: none !important;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-info h1 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main {
+                padding: 20px;
+            }
+
+            .quote-panel {
+                position: relative;
+                width: 100%;
+                bottom: 0;
+                right: 0;
+                margin-top: 40px;
+                transform: none;
+            }
+        }
+
+        /* Toast Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .custom-toast {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-width: 300px;
+            border-left: 5px solid #4834d4;
+        }
+
+        .custom-toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left-color: #22c55e;
+        }
+
+        .toast-error {
+            border-left-color: #ef4444;
+        }
+
+        .toast-info {
+            border-left-color: #3b82f6;
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+
+<body>
+    <canvas id="snow-canvas"></canvas>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Top Navigation instead of sidebar -->
+    <div
+        style="position: absolute; top: 30px; left: 40px; z-index: 1000; display: flex; align-items: center; gap: 20px;">
+        <button onclick="location.href='index.html'"
+            style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border-radius: 12px; padding: 12px 24px; font-weight: 600; border: 1px solid rgba(255,255,255,0.5); cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); color: #4834d4; font-family: 'Poppins', sans-serif; font-size: 15px; transition: 0.3s;"
+            onmouseover="this.style.background='rgba(255,255,255,0.9)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.7)'">
+            <i class="fas fa-arrow-left" style="margin-right: 6px;"></i> Back to Home
+        </button>
+        <div
+            style="margin: 0; padding: 0; font-size: 24px; color: #4834d4; font-weight: 800; font-family: 'Poppins', sans-serif; text-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <i class="fas fa-graduation-cap" style="margin-right: 8px;"></i>Skill Circle
+        </div>
+    </div>
+
+    <main class="main" style="width: 100%; margin: 0 auto; max-width: 1400px; padding-top: 120px;">
+        <div id="dynamic-slogan" class="slogan-box"></div>
+
+        <div class="hero-banner" id="hero-panel">
+            <div class="hero-info">
+                <span id="badge" style="
+              background: var(--accent);
+              color: white;
+              padding: 5px 15px;
+              border-radius: 50px;
+              font-size: 10px;
+              font-weight: 700;
+            ">LEVEL: EXPERT</span>
+                <h1 id="title">Loading...</h1>
+                <p id="desc">
+                    Select a course from the menu to explore interactive 3D content and
+                    resources.
+                </p>
+                <button id="enrollBtn"
+                    style="padding: 10px 25px; border:none; border-radius: 8px; margin-top: 15px; background: var(--accent); color: white; cursor: pointer; font-weight: bold; font-family: 'Poppins', sans-serif;"
+                    onclick="enrollCourse()">
+                    <i class="fas fa-graduation-cap"></i> Enroll Now
+                </button>
+            </div>
+            <img src="" id="hero-img" class="course-img-3d" />
+        </div>
+
+        <div class="grid">
+            <a href="https://developer.mozilla.org" target="_blank" class="res-card" onclick="trackResource('doc')">
+                <img src="https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=500" />
+                <h3>Documentation</h3>
+                <p style="color: #718096; font-size: 14px">
+                    Official technical guides and API documentation.
+                </p>
+            </a>
+
+            <a href="https://codesandbox.io" target="_blank" class="res-card" onclick="trackResource('sandbox')">
+                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500" />
+                <h3>Coding Sandbox</h3>
+                <p style="color: #718096; font-size: 14px">
+                    Live coding environment to test your logic.
+                </p>
+            </a>
+
+            <a href="https://books.google.com" target="_blank" class="res-card" onclick="trackResource('book')">
+                <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=500" />
+                <h3>Course Textbook</h3>
+                <p style="color: #718096; font-size: 14px">
+                    Comprehensive theories and expert case studies.
+                </p>
+            </a>
+
+            <!-- ✅ ONLY ONE VIDEO CARD -->
+            <div id="video-link-card" class="res-card">
+                <img id="video-thumb" src="" />
+                <h3>Watch on YouTube</h3>
+                <p style="color: #718096; font-size: 14px">
+                    Click to open course video
+                </p>
+            </div>
+
+            <!-- Complete Course Target -->
+            <div id="complete-card" class="res-card" onclick="markCompleted()"
+                style="cursor: pointer; border-bottom: 5px solid #27ae60;">
+                <i class="fa-solid fa-flag-checkered text-success"
+                    style="font-size: 80px; margin-bottom: 20px; display:block;"></i>
+                <h3>Finish Course</h3>
+                <p style="color: #718096; font-size: 14px">
+                    Click here to formally mark this course as completed and unlock your official certificate!
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <div class="quote-panel" id="quote-box">
+        <i class="fas fa-quote-left" style="color: #cbd5e1; font-size: 24px"></i>
+        <p id="quote-text" style="
+          font-size: 15px;
+          font-style: italic;
+          margin-top: 10px;
+          color: #4a5568;
+        "></p>
+    </div>
+
+    <script>
+        const courses = {
+            // Technical Tracks
+            web: {
+                title: "Web Dev: HTML, CSS, JS",
+                description: "Master the building blocks of the digital world. Learn to craft stunning, responsive websites from scratch and turn your creative visions into interactive, high-performance web applications that captivate users globally.",
+                cat: "Tech",
+                icon: "fa-code",
+                bg: "#f0f9ff",
+                img: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=600",
+                quote: "Websites are the front door to your digital identity.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLfqMhTWNBTe3H6c9OGXb5_6wcc1Mca52n&si=dqGmsvlEDZ7JASPn",
+                link: "https://youtube.com/playlist?list=PLfqMhTWNBTe3H6c9OGXb5_6wcc1Mca52n",
+                thumb: "https://img.youtube.com/vi/Rek0NWPCNOc/0.jpg",
+            },
+            programming: {
+                title: "Java",
+                description: "Dive deep into one of the most powerful and widely-used programming languages in the world. Master object-oriented concepts and build robust, scalable, enterprise-level software that powers modern tech giants.",
+                cat: "Tech",
+                icon: "fa-terminal",
+                bg: "#fdf2f8",
+                img: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=600",
+                quote: "Code is the architecture of the modern world.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLsyeobzWxl7pe_IiTfNyr55kwJPWbgxB5&si=G_57eurBhNmDBzy1",
+                link: "https://youtube.com/playlist?list=PLsyeobzWxl7pe_IiTfNyr55kwJPWbgxB5",
+                thumb: "https://img.youtube.com/vi/bm0OyhwFDuY/0.jpg",
+            },
+            dsa: {
+                title: "DSA & Problem Solving",
+                description: "Sharpen your logical reasoning and ace top technical interviews. Hack problem-solving by building an invincible toolkit of data structures and algorithms designed for peak optimization and algorithmic dominance.",
+                cat: "Tech",
+                icon: "fa-brain",
+                bg: "#f5f3ff",
+                img: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=600",
+                quote: "Algorithms are the heart of efficiency.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PL10if0bhBdg-7t2afebQLXsIC--yLsG30&si=BDVtfBCXvLhAkBEB",
+                link: "https://youtube.com/playlist?list=PL10if0bhBdg-7t2afebQLXsIC--yLsG30",
+                thumb: "https://img.youtube.com/vi/h1CEO10XncE/0.jpg",
+            },
+            ai: {
+                title: "ML, AI & Data Analysis",
+                description: "Step into the future. Learn to harness the immense power of artificial intelligence, build predictive machine learning models, and unlock deep insights hidden within massive datasets to drive global innovation.",
+                cat: "Tech",
+                icon: "fa-robot",
+                bg: "#ecfdf5",
+                img: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600",
+                quote: "AI is the new electricty of industry.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PL9ooVrP1hQOGHNaCT7_fwe9AabjZI1RjI&si=gVH1JNdlNtu9fEKf",
+                link: "https://youtube.com/playlist?list=PL9ooVrP1hQOGHNaCT7_fwe9AabjZI1RjI",
+                thumb: "https://img.youtube.com/vi/4jmsHaJ7xEA/0.jpg",
+            },
+            db: {
+                title: "MySQL & MongoDB",
+                description: "Data architectures rule the modern web. Master both relational and NoSQL database engineering, formulate brilliant queries, and architect unbreakable storage solutions for high-traffic platforms.",
+                cat: "Tech",
+                icon: "fa-database",
+                bg: "#fff7ed",
+                img: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=600",
+                quote: "Data only matters if it is organized.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PL-Xo326N2ghlgFn-Ve-Jrja7gLa9KWcvv&si=Q42_6xHzdoiGuvMx",
+                link: "https://youtube.com/playlist?list=PL-Xo326N2ghlgFn-Ve-Jrja7gLa9KWcvv",
+                thumb: "https://img.youtube.com/vi/QMzfiQQpKoI/0.jpg",
+            },
+            git: {
+                title: "Git & Version Control",
+                description: "The absolute backbone of team software engineering. Gain uncompromising mastery over branching, staging, and collaborative pipelines so you can deploy flawlessly with zero friction.",
+                cat: "Tech",
+                icon: "fa-code-branch",
+                bg: "#f8fafc",
+                img: "https://images.unsplash.com/photo-1618401471353-b98aadebc25a?w=600",
+                quote: "Track the past to build the future.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLzdWZT-ZJD081YB1TLN5rNI1vw5hTdRzH&si=Bs9SlC5QcHPBVfix",
+                link: "https://youtube.com/playlist?list=PLzdWZT-ZJD081YB1TLN5rNI1vw5hTdRzH",
+                thumb: "https://img.youtube.com/vi/XdMMfUKBbtE/0.jpg",
+            },
+            cyber: {
+                title: "Cyber Security & Hacking",
+                description: "Defend digital frontiers. Plunge into ethical hacking, learn how to identify critical vulnerabilities, and secure infrastructure against advanced threats like an elite cybersecurity operative.",
+                cat: "Tech",
+                icon: "fa-user-shield",
+                bg: "#fff1f2",
+                img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600",
+                quote: "Security is not a product, it is a mindset.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PL9ooVrP1hQOGPQVeapGsJCktzIO4DtI4_&si=EfLASUGbWud95hBW",
+                link: "https://youtube.com/playlist?list=PL9ooVrP1hQOGPQVeapGsJCktzIO4DtI4_",
+                thumb: "https://img.youtube.com/vi/ooJSgsB5fIE/0.jpg",
+            },
+            cloud: {
+                title: "Cloud: AWS & Basics",
+                description: "Deploy globally in seconds. Master the core ecosystem of Amazon Web Services, orchestrate resilient architectures, and harness infinite computing power directly from the cloud.",
+                cat: "Tech",
+                icon: "fa-cloud",
+                bg: "#eff6ff",
+                img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600",
+                quote: "The cloud is just someone else's powerful computer.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLneBjIzDLECkYQ7dYpvWFSgEwTMeZkykF&si=UVK0iqvdRhZ_7med",
+                link: "https://youtube.com/playlist?list=PLneBjIzDLECkYQ7dYpvWFSgEwTMeZkykF",
+                thumb: "https://img.youtube.com/vi/u6ZQEhF8xxc/0.jpg",
+            },
+            mobile: {
+                title: "Android & Flutter",
+                description: "Put the world directly in users' pockets. Engineer blazing-fast, beautiful mobile applications across platforms globally using Google's revolutionary mobile SDKs.",
+                cat: "Tech",
+                icon: "fa-mobile-screen",
+                bg: "#faf5ff",
+                img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600",
+                quote: "Mobile is the core of user experience.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLSBsoHVIf9kIdfulC3_vDbkF3o0j-34Jr&si=yc0nD6VaCPK_Vngn",
+                link: "https://youtube.com/playlist?list=PLSBsoHVIf9kIdfulC3_vDbkF3o0j-34Jr",
+                thumb: "https://img.youtube.com/vi/o_9Xkjv6irI/0.jpg",
+            },
+            design: {
+                title: "UI/UX & Figma",
+                description: "Architect the user experience. Uncover the psychology of design, craft visually spectacular interfaces, and command modern prototyping tools to build software that users helplessly fall in love with.",
+                cat: "Tech",
+                icon: "fa-bezier-curve",
+                bg: "#fdf4ff",
+                img: "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?w=600",
+                quote: "Design is not what it looks like, but how it works.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLEiEAq2VkUULzCiDV5VyF7zR6zoDIT_eH&si=rcVWbJ_Ch_q0heQf",
+                link: "https://youtube.com/playlist?list=PLEiEAq2VkUULzCiDV5VyF7zR6zoDIT_eH",
+                thumb: "https://img.youtube.com/vi/55NvZjUZIO8/0.jpg",
+            },
+            // Non-Technical Tracks
+            comm: {
+                title: "Communication & Speaking",
+                description: "Become an unstoppable communicator. Learn how to articulate your vision, influence key decision-makers, and command any room with unwavering confidence, clarity, and undeniable presence.",
+                cat: "Soft",
+                icon: "fa-comments",
+                bg: "#f0fdff",
+                img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600",
+                quote: "Communication is the bridge between confusion and clarity.",
+                video:
+                    "https://youtube.com/embed/videoseries?list=PLv9O1ieIsEgfbNVwPqWxlZq_JtKmnsubv&si=EVo1gN5F-vhpeTIh",
+                link: "https://youtube.com/playlist?list=PLv9O1ieIsEgfbNVwPqWxlZq_JtKmnsubv",
+                thumb: "https://img.youtube.com/vi/hJegA740NEo/0.jpg",
+            },
+            leadership: {
+                title: "Leadership & Team Mgmt",
+                description: "Transform from a contributor into a visionary. Master team dynamics, cultivate a culture of excellence, and learn to confidently drive enormous projects across the finish line.",
+                cat: "Soft",
+                icon: "fa-crown",
+                bg: "#fffbeb",
+                img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600",
+                quote: "Leaders don't find followers, they create more leaders.",
+                video: "https://www.youtube.com/embed/tqC1WwWKtfE",
+                link: "https://youtu.be/tqC1WwWKtfE",
+            },
+            time: {
+                title: "Time & Productivity",
+                description: "Reclaim mastery over your own life. Develop unshakeable focus, eliminate procrastination entirely, and design systematic routines that skyrocket your daily output.",
+                cat: "Soft",
+                icon: "fa-clock",
+                bg: "#fef2f2",
+                img: "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=600",
+                quote: "Control your time, or it will control you.",
+                video: "https://www.youtube.com/embed/7ax4Tb5G1P4",
+                link: "https://youtu.be/7ax4Tb5G1P4",
+                thumb: "https://img.youtube.com/vi/7ax4Tb5G1P4/0.jpg",
+            },
+            thinking: {
+                title: "Critical & Analytical Thinking",
+                description: "Supercharge your intellect. Learn to systematically deconstruct incredibly complex problems, eliminate cognitive biases, and execute brilliant, data-driven decisions seamlessly.",
+                cat: "Soft",
+                icon: "fa-lightbulb",
+                bg: "#f0fdf4",
+                img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600",
+                quote: "Analysis is the key to sound decision making.",
+                video: "https://www.youtube.com/embed/0tqq66zwa7g",
+                link: "https://youtu.be/0tqq66zwa7g",
+                thumb: "https://img.youtube.com/vi/0tqq66zwa7g/0.jpg",
+            },
+            eq: {
+                title: "Emotional Intelligence",
+                description: "The ultimate edge in any career. Elevate your self-awareness, decode subtle social dynamics, and dramatically enhance your interpersonal resilience to thrive under intense pressure.",
+                cat: "Soft",
+                icon: "fa-heart-pulse",
+                bg: "#fff1f2",
+                img: "https://images.unsplash.com/photo-1499209974431-9dac3adaf471?w=600",
+                quote: "Self-awareness is the highest form of intelligence.",
+                video: "https://www.youtube.com/embed/kG5Qb9sr0YQ",
+                link: "https://youtu.be/kG5Qb9sr0YQ",
+                thumb: "https://img.youtube.com/vi/0tqq66zwa7g/0.jpg",
+            },
+            creativity: {
+                title: "Creativity & Innovation",
+                description: "Break the mold. Master frameworks that generate boundless ideas, shatter creative blocks instantly, and systematically innovate solutions that disrupt entire industries.",
+                cat: "Soft",
+                icon: "fa-wand-magic-sparkles",
+                bg: "#fefce8",
+                img: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600",
+                quote: "Innovation is taking what exists and making it better.",
+                video: "https://www.youtube.com/embed/KPlJcD-o-4Q",
+                link: "https://youtu.be/KPlJcD-o-4Q",
+                thumb: "https://img.youtube.com/vi/KPlJcD-o-4Q/0.jpg",
+            },
+        };
+
+        const slogans = [
+            "Unlocking Human Potential.",
+            "Your Future, Defined by Skill.",
+            "Master the Tech. Own the Future.",
+            "Elevate Your Career Path.",
+        ];
+
+        function init() {
+            document.getElementById("dynamic-slogan").innerText =
+                slogans[Math.floor(Math.random() * slogans.length)];
+
+            const selected = localStorage.getItem("selectedCourse") || "web";
+            // Ensure course exists, fallback to web
+            const safeSelected = courses[selected] ? selected : "web";
+
+            // Render the single course completely independent of sidebar
+            const dummyBtn = { classList: { add: () => { }, remove: () => { } } };
+            loadCourse(safeSelected, dummyBtn);
+            setupSnow();
+        }
+
+        let currentCourseId = "web";
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast toast-${type}`;
+            toast.innerHTML = `<i class="fa-solid ${icon}" style="color:${type === 'success' ? '#22c55e' : (type === 'error' ? '#ef4444' : '#3b82f6')}; font-size:20px;"></i><span class="fw-medium">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 500); }, 3000);
+        }
+
+        async function enrollCourse() {
+            const userStr = localStorage.getItem("user");
+            if (!userStr) {
+                showToast("Please login first!", "error");
+                window.location.href = "login.html";
+                return;
+            }
+            const user = JSON.parse(userStr);
+            const c = courses[currentCourseId];
+
+            try {
+                const res = await fetch(API_BASE_URL + "/api/enroll", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: user.email, course_id: currentCourseId, course_title: c.title })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Enrollment Complete! Accessing " + c.title, "success");
+                } else {
+                    showToast(data.detail || "Enrollment Error", "error");
+                }
+            } catch (err) {
+                let myCourses = JSON.parse(localStorage.getItem("my_courses") || "[]");
+                if (!myCourses.some(e => e.course_id === currentCourseId)) {
+                    myCourses.push({ email: user.email, course_id: currentCourseId, course_title: c.title });
+                    localStorage.setItem("my_courses", JSON.stringify(myCourses));
+                    showToast("Offline Mode: Enrolled in " + c.title, "info");
+                } else {
+                    showToast("Note: You are already enrolled.", "info");
+                }
+            }
+        }
+
+        function loadCourse(id, element) {
+            currentCourseId = id;
+            localStorage.setItem("selectedCourse", id);
+            const c = courses[id];
+
+            // 🎨 Theme & Content
+            document.body.style.backgroundColor = c.bg;
+            document.getElementById("title").innerText = c.title;
+            document.getElementById("desc").innerText = c.description || "Dive deep into this topic and expand your skillset to the expert level!";
+            document.getElementById("hero-img").src = c.img;
+            document.getElementById("quote-text").innerText = c.quote;
+
+            // 🔗 YouTube Dynamic Card
+            const videoCard = document.getElementById("video-link-card");
+            const thumb = document.getElementById("video-thumb");
+
+            if (c.link) {
+                videoCard.style.display = "block";
+
+                // Open video/playlist
+                videoCard.onclick = () => {
+                    trackResource('video');
+                    window.open(c.link, "_blank");
+                };
+
+                // ✅ Use thumbnail directly (FIXED)
+                thumb.src = c.thumb || "https://img.youtube.com/vi/tqC1WwWKtfE/0.jpg";
+            } else {
+                videoCard.style.display = "none";
+            }
+
+            // 📌 Active Menu Highlight
+            document
+                .querySelectorAll(".nav-item")
+                .forEach((el) => el.classList.remove("active"));
+
+            element.classList.add("active");
+
+            // ✨ Animations
+            gsap.from("#hero-panel", {
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                ease: "power2.out",
+            });
+
+            gsap.from("#hero-img", {
+                duration: 1.2,
+                rotateY: 30,
+                scale: 0.8,
+                ease: "elastic.out(1, 0.5)",
+            });
+        }
+
+        // --- THREE.JS SNOWFALL ---
+        let scene, camera, renderer, particles;
+        function setupSnow() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000,
+            );
+            renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById("snow-canvas"),
+                alpha: true,
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const geo = new THREE.BufferGeometry();
+            const pos = [];
+            for (let i = 0; i < 1500; i++) {
+                pos.push(
+                    Math.random() * 200 - 100,
+                    Math.random() * 200 - 100,
+                    Math.random() * 200 - 100,
+                );
+            }
+            geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.3,
+                transparent: true,
+                opacity: 0.6,
+            });
+            particles = new THREE.Points(geo, mat);
+            scene.add(particles);
+            camera.position.z = 50;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.y += 0.001;
+                particles.position.y -= 0.03;
+                if (particles.position.y < -50) particles.position.y = 50;
+                renderer.render(scene, camera);
+            }
+            animate();
+        }
+
+        function trackResource(resName) {
+            const userStr = localStorage.getItem("user");
+            if (!userStr) return;
+            const email = JSON.parse(userStr).email;
+            const progKey = email + "_" + currentCourseId + "_progress";
+
+            let progress = JSON.parse(localStorage.getItem(progKey) || "{}");
+            progress[resName] = true;
+            localStorage.setItem(progKey, JSON.stringify(progress));
+        }
+
+        function markCompleted() {
+            const userStr = localStorage.getItem("user");
+            if (!userStr) { showToast("Security: Please login to verify achievement.", "error"); return; }
+            const user = JSON.parse(userStr);
+            const email = user.email;
+
+            const needsVideo = courses[currentCourseId].link ? true : false;
+            const progKey = email + "_" + currentCourseId + "_progress";
+            let progress = JSON.parse(localStorage.getItem(progKey) || "{}");
+
+            if (!progress.doc || !progress.sandbox || !progress.book || (needsVideo && !progress.video)) {
+                showToast("System Check: Review all resources to unlock certificate.", "error");
+                return;
+            }
+
+            const completedKey = "completed_courses_" + email;
+            const completedCourses = JSON.parse(localStorage.getItem(completedKey) || "[]");
+            if (!completedCourses.includes(currentCourseId)) {
+                completedCourses.push(currentCourseId);
+                localStorage.setItem(progKey, JSON.stringify({})); // Reset progress for this user
+                localStorage.setItem(completedKey, JSON.stringify(completedCourses));
+                showToast("Achievement Unlocked! Your certificate is ready.", "success");
+            } else {
+                showToast("Success: Course already verified 100%.", "info");
+            }
+        }
+
+        window.onload = init;
+        window.onresize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Certificates - Skill Circle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        .placeholder-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <h4 class="logo"><i class="fa-solid fa-graduation-cap"></i> Skill Circle</h4>
+        <ul class="menu">
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
+                My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+                    class="fa-solid fa-layer-group"></i> All Skills</li>
+            <li class="active" onclick="location.href='certificates.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-certificate"></i> Certificates</li>
+            <li onclick="location.href='progress.html'" style="cursor:pointer;"><i class="fa-solid fa-chart-line"></i>
+                Progress</li>
+            <li onclick="location.href='profile.html'" style="cursor:pointer;"><i class="fa-solid fa-user"></i> <span
+                    id="sidebarName">Profile</span></li>
+            <li class="logout" onclick="logout()" style="cursor: pointer;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Logout</li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="main-content" id="mainContent">
+        <nav class="navbar navbar-expand-lg navbar-custom px-4">
+            <button class="btn toggle-btn me-2" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
+                    class="ms-2 brand-text">Circle</span>
+            </a>
+            <div class="ms-auto">
+                <div class="dropdown">
+                    <button class="btn profile-btn dropdown-toggle" data-bs-toggle="dropdown"><i
+                            class="fa-solid fa-user"></i> <span id="navName">Profile</span></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="my_courses.html">My Courses</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container my-5">
+            <div class="text-center mb-5">
+                <i id="certIcon" class="fa-solid fa-award text-warning"
+                    style="font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));"></i>
+                <h1 id="certTitle" class="gradient-text fw-bold">Your Official Certificates</h1>
+                <p id="certSub" class="text-muted fs-5">Congratulations! Below are the verified certificates for your
+                    completed
+                    courses.</p>
+            </div>
+
+            <div id="certList" class="row g-4 text-center mt-3">
+                <!-- Javascript will inject certificates here -->
+            </div>
+        </div>
+
+        <!-- Fullscreen Certificate Verified Document Modal -->
+        <div id="certificateModal"
+            style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:9999; flex-direction: column; align-items:center; justify-content:flex-start; overflow-y: auto; padding: 50px 0; opacity: 0; transition: opacity 0.3s; pointer-events: none;">
+            <!-- Beautiful Certificate Container -->
+            <div id="certBody"
+                style="background:#fff; width: 95%; max-width: 900px; padding: 60px; border: 15px solid #4e54c8; box-shadow: 0 20px 80px rgba(0,0,0,0.6); text-align: center; position:relative; margin: auto;">
+                <button id="certCloseBtn" onclick="closeCert()"
+                    style="position:absolute; top:-25px; right:-25px; background:#e74c3c; color:white; border:none; border-radius:50%; width: 45px; height: 45px; font-weight:bold; cursor:pointer; font-size: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 10;"><i
+                        class="fa-solid fa-xmark"></i></button>
+
+                <i class="fa-solid fa-graduation-cap" style="font-size: 80px; color: #fbbf24; margin-bottom:10px;"></i>
+                <h1
+                    style="font-family: 'Times New Roman', serif; color: #2b2b2b; font-size: 55px; font-weight: bold; letter-spacing: 1px;">
+                    Certificate of Completion</h1>
+
+                <p style="font-size: 22px; color: #666; margin-top:30px; font-style: italic;">This is to proudly certify
+                    that</p>
+
+                <h2 id="certName"
+                    style="font-size: 45px; color: #4e54c8; font-family: 'Poppins', sans-serif; text-transform: uppercase; font-weight: 800; border-bottom: 3px solid #fbbf24; display: inline-block; padding-bottom: 5px; margin-bottom: 25px;">
+                    John Doe</h2>
+
+                <p style="font-size: 20px; color: #666; font-style: italic;">has successfully completed all strict
+                    requirements established for mastering</p>
+
+                <h3 id="certCourse" style="font-size: 35px; color: #2b2b2b; font-weight: 800; margin-bottom: 40px;">Web
+                    Development</h3>
+
+                <div
+                    style="display: flex; justify-content: space-between; margin-top: 40px; border-top: 2px dashed #ccc; padding-top: 20px; text-align: left;">
+                    <div>
+                        <h4
+                            style="font-weight: bold; font-family: cursive; font-size: 28px; color: #4e54c8; margin: 0;">
+                            Skill Circle Team</h4>
+                        <p style="font-size: 14px; color: #999;">Platform Administrators</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <h4 id="certDate" style="font-weight: bold; font-size: 22px; color: #2b2b2b; margin: 0;">
+                            2024-12-01</h4>
+                        <p style="font-size: 14px; color: #999;">Date of Issuance</p>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px; margin-bottom: 50px;">
+                <button onclick="window.print()" class="btn btn-warning fw-bold px-4 py-3 rounded-pill shadow"
+                    style="pointer-events: auto;"><i class="fa-solid fa-print me-2"></i> Print Document</button>
+                <button onclick="downloadCertImage()" class="btn btn-success fw-bold px-4 py-3 rounded-pill shadow"
+                    style="pointer-events: auto;"><i class="fa-solid fa-download me-2"></i> Download Image</button>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const sidebar = document.getElementById("sidebar");
+                const toggleBtn = document.querySelector(".toggle-btn");
+                const mainContent = document.querySelector(".main-content");
+                if (toggleBtn) {
+                    toggleBtn.addEventListener("click", function (e) {
+                        e.stopPropagation(); sidebar.classList.toggle("open"); mainContent.classList.toggle("shift");
+                    });
+                }
+                document.addEventListener("click", function (e) {
+                    if (sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
+                        sidebar.classList.remove("open"); mainContent.classList.remove("shift");
+                    }
+                });
+                const userStr = localStorage.getItem("user");
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    if (user.fullname) {
+                        document.getElementById("navName").innerText = user.fullname;
+                        document.getElementById("sidebarName").innerText = user.fullname;
+                    }
+                }
+            });
+            function logout() { localStorage.removeItem("user"); window.location.href = "login.html"; }
+
+            async function fetchCertificates() {
+                const userStr = localStorage.getItem("user");
+                if (!userStr) {
+                    document.getElementById("certIcon").className = "fa-solid fa-lock text-muted";
+                    document.getElementById("certTitle").innerText = "Authentication Required";
+                    document.getElementById("certSub").innerText = "Please login to view and manage your earned certificates.";
+                    document.getElementById("certList").innerHTML = "<div class='col-12 text-center text-muted'><h4>Please login to unlock your certificates.</h4></div>";
+                    return;
+                }
+                const user = JSON.parse(userStr);
+                const email = user.email;
+                let courses = [];
+
+                try {
+                    const res = await fetch("http://127.0.0.1:8000/api/my_courses/" + encodeURIComponent(email));
+                    const data = await res.json();
+                    if (res.ok) {
+                        courses = data.courses;
+                    } else {
+                        throw new Error("API failed");
+                    }
+                } catch (err) {
+                    console.error("Using local fallback", err);
+                    const myCoursesStr = localStorage.getItem("my_courses");
+                    if (myCoursesStr) courses = JSON.parse(myCoursesStr).filter(c => c.email === email);
+                }
+
+                const list = document.getElementById("certList");
+                const completedKey = "completed_courses_" + email;
+                const completedTracker = JSON.parse(localStorage.getItem(completedKey) || "[]");
+                const earnedCourses = courses.filter(c => completedTracker.includes(c.course_id));
+
+                if (earnedCourses.length === 0) {
+                    document.getElementById("certIcon").className = "fa-solid fa-certificate text-muted";
+                    document.getElementById("certTitle").innerText = "Certification Center";
+                    document.getElementById("certSub").innerText = "You haven't earned any certificates yet. Complete your courses to unlock them here.";
+
+                    list.innerHTML = `
+                    <div class='col-12 mt-2'>
+                        <div class="card shadow-sm border-0" style="border-radius: 20px; text-align: left; max-width: 800px; margin: 0 auto; border-left: 8px solid #fbbf24;">
+                            <div class="card-body p-5">
+                                <h3 class="fw-bold mb-4" style="color: #2b2b2b;"><i class="fa-solid fa-scroll text-warning me-2"></i> How to Earn Your Certificate</h3>
+                                <p class="text-muted mb-4" style="font-size: 16px;">Certificates are an official, verified record of your technical and soft skills. Follow these strict rules to unlock your document:</p>
+                                
+                                <ul class="text-muted" style="font-size: 16px; line-height: 1.8; list-style-type: none; padding: 0;">
+                                    <li class="mb-3"><i class="fa-solid fa-check-circle text-success me-2"></i> <b>Enroll in a Course:</b> Go to the Home dashboard and select any course track you wish to formally master.</li>
+                                    <li class="mb-3"><i class="fa-solid fa-check-circle text-success me-2"></i> <b>Study the Material:</b> Thoroughly review the course resources, official documentation, and watch the attached syllabus lectures.</li>
+                                    <li class="mb-3"><i class="fa-solid fa-check-circle text-success me-2"></i> <b>Complete the Track:</b> Once you have completed all requirements, click the<b><i class="fa-solid fa-flag-checkered"></i> Finish Course</b> interactive button inside the course.</li>
+                                    <li><i class="fa-solid fa-check-circle text-success me-2"></i> <b>Claim Your Reward:</b> Return to this exact page to permanently view, download, and legitimately print your verified official document!</li>
+                                </ul>
+                                
+                                <div class="text-center mt-5">
+                                    <button class="btn btn-primary px-5 py-3 fw-bold rounded-pill shadow-sm" style="background-color: #4834d4; border: none;" onclick="location.href='index.html'"><i class="fa-solid fa-magnifying-glass me-2"></i> Explore Courses Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    return;
+                }
+
+                earnedCourses.forEach(c => {
+                    const col = document.createElement("div");
+                    col.className = "col-md-4";
+                    col.innerHTML = `
+                    <div class="card shadow border-0 h-100" style="border-radius:20px; overflow: hidden; border-top: 8px solid #fbbf24; cursor: pointer;" onclick="viewCert('${user.fullname}', '${c.course_title}')">
+                        <div class="card-body py-5">
+                            <i class="fa-solid fa-certificate text-warning" style="font-size: 50px; margin-bottom: 20px;"></i>
+                            <h4 class="fw-bold" style="color: #4e54c8;">${c.course_title}</h4>
+                            <p class="text-muted small mt-2">Status: <span class="badge bg-success">100% Completed</span></p>
+                            <button class="btn btn-outline-primary mt-3 rounded-pill px-4 fw-bold shadow-sm">View Certificate <i class="fa-solid fa-arrow-right ms-1"></i></button>
+                        </div>
+                    </div>
+                `;
+                    list.appendChild(col);
+                });
+            }
+
+            function viewCert(name, course) {
+                document.getElementById('certName').innerText = name;
+                document.getElementById('certCourse').innerText = course;
+
+                const today = new Date();
+                document.getElementById('certDate').innerText = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                const modal = document.getElementById('certificateModal');
+                modal.style.display = "flex";
+                setTimeout(() => {
+                    modal.style.opacity = "1";
+                    modal.style.pointerEvents = "auto";
+                }, 10);
+            }
+
+            function closeCert() {
+                const modal = document.getElementById('certificateModal');
+                modal.style.opacity = "0";
+                modal.style.pointerEvents = "none";
+                setTimeout(() => {
+                    modal.style.display = "none";
+                }, 300);
+            }
+
+            function downloadCertImage() {
+                const certNode = document.getElementById('certBody');
+                document.getElementById('certCloseBtn').style.display = 'none'; // Hide close button
+
+                html2canvas(certNode, { scale: 2 }).then(canvas => {
+                    document.getElementById('certCloseBtn').style.display = 'block'; // Restore
+                    const link = document.createElement('a');
+                    link.download = document.getElementById('certCourse').innerText.replace(/\s+/g, '_') + '_Certificate.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                });
+            }
+
+            // Initialize fetching
+            document.addEventListener("DOMContentLoaded", function () {
+                fetchCertificates();
+            });
+        </script>
+</body>
+
+</html>
