@@ -1,26 +1,12 @@
 {
-  "builds": [
+  "rewrites": [
     {
-      "src": "fastapi/main.py",
-      "use": "@vercel/python"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "frontend/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "fastapi/main.py"
-    },
-    {
-      "src": "/",
-      "dest": "frontend/welcome.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "frontend/$1"
+      "source": "/",
+      "destination": "/frontend/welcome.html"
     }
   ],
   "env": {
