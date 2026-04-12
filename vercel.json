@@ -1,21 +1,12 @@
 {
-  "builds": [
-    {
-      "src": "fastapi/main.py",
-      "use": "@vercel/python"
-    }
-  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "fastapi/main.py"
+      "destination": "api/index.py"
     },
     {
       "source": "/",
       "destination": "welcome.html"
     }
-  ],
-  "env": {
-    "MONGODB_URI": "mongodb+srv://Admin:1234@cluster0.p4olqer.mongodb.net/?appName=Cluster0"
-  }
+  ]
 }
