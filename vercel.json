@@ -2,14 +2,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "fastapi/main.py"
     },
     {
       "source": "/",
-      "destination": "/frontend/welcome.html"
+      "destination": "welcome.html"
     }
-  ],
-  "env": {
-    "MONGODB_URI": "mongodb+srv://Admin:1234@cluster0.p4olqer.mongodb.net/?appName=Cluster0"
-  }
+  ]
 }
