@@ -29,11 +29,19 @@
             <i class="fa-solid fa-graduation-cap"></i> Skill Circle
         </h4>
         <ul class="menu">
+<<<<<<< HEAD:my_courses.html
             <li onclick="location.href='dashboard.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
             </li>
             <li class="active" onclick="location.href='my_courses.html'" style="cursor:pointer;"><i
                     class="fa-solid fa-book-open"></i> My Courses</li>
             <li onclick="location.href='dashboard.html#skillsSection'" style="cursor:pointer;"><i
+=======
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="active" onclick="location.href='my_courses.html'" style="cursor:pointer;"><i
+                    class="fa-solid fa-book-open"></i> My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+>>>>>>> 91b536e (commited):frontend/my_courses.html
                     class="fa-solid fa-layer-group"></i> All Skills</li>
             <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
                     class="fa-solid fa-certificate"></i> Certificates</li>
@@ -52,7 +60,11 @@
             <button class="btn toggle-btn me-2" onclick="toggleSidebar()">
                 <i class="fa-solid fa-bars"></i>
             </button>
+<<<<<<< HEAD:my_courses.html
             <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+=======
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+>>>>>>> 91b536e (commited):frontend/my_courses.html
                 <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
                     class="ms-2 brand-text">Circle</span>
             </a>
@@ -129,9 +141,14 @@
             const email = JSON.parse(userStr).email;
             let courses = [];
 
+<<<<<<< HEAD:my_courses.html
             const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" ? "http://127.0.0.1:8000" : "https://skill-circle-backend.onrender.com";
             try {
                 const res = await fetch(`${API_BASE_URL}/api/my_courses/` + encodeURIComponent(email));
+=======
+            try {
+                const res = await fetch("http://127.0.0.1:8000/api/my_courses/" + encodeURIComponent(email));
+>>>>>>> 91b536e (commited):frontend/my_courses.html
                 const data = await res.json();
                 if (res.ok) {
                     courses = data.courses;

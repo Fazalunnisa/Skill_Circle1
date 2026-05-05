@@ -90,18 +90,29 @@
             width: 400px;
         }
     </style>
+<<<<<<< HEAD:profile.html
     <script src="config.js"></script>
+=======
+>>>>>>> 91b536e (commited):frontend/profile.html
 </head>
 
 <body>
     <div class="sidebar" id="sidebar">
         <h4 class="logo"><i class="fa-solid fa-graduation-cap"></i> Skill Circle</h4>
         <ul class="menu">
+<<<<<<< HEAD:profile.html
             <li onclick="location.href='dashboard.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
             </li>
             <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
                 My Courses</li>
             <li onclick="location.href='dashboard.html#skillsSection'" style="cursor:pointer;"><i
+=======
+            <li onclick="location.href='index.html'" style="cursor:pointer;"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li onclick="location.href='my_courses.html'" style="cursor:pointer;"><i class="fa-solid fa-book-open"></i>
+                My Courses</li>
+            <li onclick="location.href='index.html#skillsSection'" style="cursor:pointer;"><i
+>>>>>>> 91b536e (commited):frontend/profile.html
                     class="fa-solid fa-layer-group"></i> All Skills</li>
             <li onclick="location.href='certificates.html'" style="cursor:pointer;"><i
                     class="fa-solid fa-certificate"></i> Certificates</li>
@@ -117,7 +128,11 @@
     <div class="main-content" id="mainContent">
         <nav class="navbar navbar-expand-lg navbar-custom px-4">
             <button class="btn toggle-btn me-2" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+<<<<<<< HEAD:profile.html
             <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+=======
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+>>>>>>> 91b536e (commited):frontend/profile.html
                 <span class="brand-text"><i class="fa-solid fa-graduation-cap"></i> Skill</span> <span
                     class="ms-2 brand-text">Circle</span>
             </a>
@@ -244,7 +259,11 @@
             document.getElementById("statCompleted").innerText = completed.length;
 
             try {
+<<<<<<< HEAD:profile.html
                 const res = await fetch(API_BASE_URL + `/api/my_courses/${email}`);
+=======
+                const res = await fetch(`/api/my_courses/${email}`);
+>>>>>>> 91b536e (commited):frontend/profile.html
                 const data = await res.json();
                 if (res.ok) {
                     const enrolledCount = data.courses.length;

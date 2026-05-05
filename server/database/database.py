@@ -1,3 +1,4 @@
+<<<<<<< HEAD:server/database/database.py
 import os
 import certifi
 from pymongo.mongo_client import MongoClient
@@ -8,6 +9,14 @@ uri = os.environ.get("MONGODB_URI", "mongodb+srv://bukkerohithmarthandanaik_db_u
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'), tlsCAFile=certifi.where(), serverSelectionTimeoutMS=5000)
+=======
+import certifi
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+uri = "mongodb+srv://bukkerohithmarthandanaik_db_user:1234@cluster0.o9ub8xs.mongodb.net/?appName=Cluster0"
+# Create a new client and connect to the server
+client = MongoClient(uri, server_api=ServerApi('1'), tlsCAFile=certifi.where(), serverSelectionTimeoutMS=1000)
+>>>>>>> 91b536e (commited):fastapi/database/database.py
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')

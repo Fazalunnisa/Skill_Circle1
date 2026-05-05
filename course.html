@@ -286,7 +286,10 @@
             border-left-color: #3b82f6;
         }
     </style>
+<<<<<<< HEAD:course.html
     <script src="config.js"></script>
+=======
+>>>>>>> 91b536e (commited):frontend/course.html
 </head>
 
 <body>
@@ -296,7 +299,11 @@
     <!-- Top Navigation instead of sidebar -->
     <div
         style="position: absolute; top: 30px; left: 40px; z-index: 1000; display: flex; align-items: center; gap: 20px;">
+<<<<<<< HEAD:course.html
         <button onclick="location.href='dashboard.html'"
+=======
+        <button onclick="location.href='index.html'"
+>>>>>>> 91b536e (commited):frontend/course.html
             style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border-radius: 12px; padding: 12px 24px; font-weight: 600; border: 1px solid rgba(255,255,255,0.5); cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); color: #4834d4; font-family: 'Poppins', sans-serif; font-size: 15px; transition: 0.3s;"
             onmouseover="this.style.background='rgba(255,255,255,0.9)'"
             onmouseout="this.style.background='rgba(255,255,255,0.7)'">
@@ -645,7 +652,11 @@
             const c = courses[currentCourseId];
 
             try {
+<<<<<<< HEAD:course.html
                 const res = await fetch(API_BASE_URL + "/api/enroll", {
+=======
+                const res = await fetch("http://127.0.0.1:8000/api/enroll", {
+>>>>>>> 91b536e (commited):frontend/course.html
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: user.email, course_id: currentCourseId, course_title: c.title })
