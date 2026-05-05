@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from app.database.database import client
 from app.models import UserRegister, UserLogin, ContactMessage, CourseEnrollment
@@ -178,9 +179,9 @@ async def root():
     return RedirectResponse(url="/welcome.html")
 
 # Mount frontend at root natively
-frontend_dir = os.path.join(os.path.dirname(__file__), "../frontend")
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend"))
 app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
