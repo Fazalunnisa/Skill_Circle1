@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-pymongo
-bcrypt
-python-dotenv
-motor
-pydantic

@@ -173,7 +173,13 @@
       border-left: 5px solid #ef4444;
       color: #991b1b;
     }
+
+    .toast-info {
+      border-left: 5px solid #3b82f6;
+      color: #1e3a8a;
+    }
   </style>
+  <script src="config.js"></script>
 </head>
 
 <body>
@@ -267,7 +273,7 @@
       }
 
       try {
-        const response = await fetch("/api/login", {
+        const response = await fetch(API_BASE_URL + "/api/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
@@ -277,7 +283,7 @@
         if (response.ok) {
           showToast(`Handshake Verified! Welcome, ${data.user.fullname}.`, "success");
           localStorage.setItem("user", JSON.stringify(data.user));
-          setTimeout(() => window.location.href = "index.html", 1500);
+          setTimeout(() => window.location.href = "dashboard.html", 1500);
         } else {
           showToast(`Security Check: ${data.detail}`, "error");
         }
@@ -304,7 +310,7 @@
           const username = email.split("@")[0].toUpperCase();
           // Save user to local storage and login seamlessly
           localStorage.setItem("user", JSON.stringify({ email: email, fullname: username }));
-          window.location.href = "index.html";
+          window.location.href = "dashboard.html";
 
           // Reset button for browser back-navigation caching
           setTimeout(() => {
@@ -388,7 +394,7 @@
       btn.disabled = true;
 
       try {
-        const response = await fetch("/api/reset-password", {
+        const response = await fetch(API_BASE_URL + "/api/reset-password", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: resetEmail, new_password: newPwd })

@@ -181,6 +181,7 @@
             color: #1e3a8a;
         }
     </style>
+    <script src="config.js"></script>
 </head>
 
 <body>
@@ -282,7 +283,7 @@
             }
 
             try {
-                const response = await fetch("/api/register", {
+                const response = await fetch(API_BASE_URL + "/api/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ fullname: name, email, password })
@@ -318,7 +319,7 @@
                     const username = email.split("@")[0].toUpperCase();
                     // Save user to local storage and login seamlessly
                     localStorage.setItem("user", JSON.stringify({ email: email, fullname: username }));
-                    window.location.href = "index.html";
+                    window.location.href = "dashboard.html";
 
                     // Reset button for browser back-navigation caching
                     setTimeout(() => {
