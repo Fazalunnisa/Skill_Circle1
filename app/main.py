@@ -2,8 +2,8 @@ import os
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from database.database import client
-from models import UserRegister, UserLogin, ContactMessage, CourseEnrollment
+from app.database.database import client
+from app.models import UserRegister, UserLogin, ContactMessage, CourseEnrollment
 from pymongo.errors import ServerSelectionTimeoutError
 import bcrypt
 
